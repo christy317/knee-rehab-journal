@@ -23,8 +23,8 @@ export default function LogScreen({ onSaved }: { onSaved: () => void }) {
     return (
       <div className="space-y-6 pb-4">
         <header className="space-y-1">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Today's session</p>
-          <h1 className="font-display text-3xl font-medium tracking-tight">Log session</h1>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Today's session</p>
+          <h1 className="text-3xl font-bold tracking-tight">Log session</h1>
         </header>
         <div className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center">
           <p className="text-sm text-muted-foreground">
@@ -44,10 +44,10 @@ export default function LogScreen({ onSaved }: { onSaved: () => void }) {
   return (
     <div className="space-y-6 pb-4">
       <header className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Today's session</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Today's session</p>
         <div className="flex items-baseline justify-between">
-          <h1 className="font-display text-3xl font-medium tracking-tight">Log session</h1>
-          <span className="text-sm text-muted-foreground">
+          <h1 className="text-3xl font-bold tracking-tight">Log session</h1>
+          <span className="text-sm font-medium text-muted-foreground">
             {completedCount}/{todayExercises.length} done
           </span>
         </div>
@@ -115,8 +115,8 @@ export default function LogScreen({ onSaved }: { onSaved: () => void }) {
         })}
       </ul>
 
-      <section className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-soft">
-        <h2 className="font-display text-lg font-medium">Session summary</h2>
+      <section className="space-y-4 rounded-2xl border border-border bg-card p-5 shadow-soft">
+        <h2 className="text-lg font-bold tracking-tight">Session summary</h2>
 
         <div className="space-y-2">
           <Label className="text-xs uppercase tracking-wider text-muted-foreground">Overall pain</Label>
@@ -163,7 +163,7 @@ export default function LogScreen({ onSaved }: { onSaved: () => void }) {
         </div>
       </section>
 
-      <Button className="w-full" size="lg" onClick={handleSave}>
+      <Button className="w-full rounded-full" size="lg" onClick={handleSave}>
         Save session
       </Button>
     </div>

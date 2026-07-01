@@ -15,8 +15,8 @@ export default function HistoryScreen() {
   return (
     <div className="space-y-6 pb-4">
       <header className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">History</p>
-        <h1 className="font-display text-3xl font-medium tracking-tight">Your sessions</h1>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">History</p>
+        <h1 className="text-3xl font-bold tracking-tight">Your sessions</h1>
       </header>
 
       <div className="grid grid-cols-2 gap-3">
@@ -43,7 +43,7 @@ export default function HistoryScreen() {
           {logs.map((log) => {
             const expanded = openId === log.id;
             return (
-              <li key={log.id} className="overflow-hidden rounded-xl border border-border bg-card shadow-soft">
+              <li key={log.id} className="overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
                 <button
                   onClick={() => setOpenId(expanded ? null : log.id)}
                   className="flex w-full items-center gap-3 p-4 text-left"
@@ -140,13 +140,13 @@ function StatCard({
   accent?: string;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card p-4 shadow-soft">
-      <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
+      <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
         {icon}
         {label}
       </div>
       <div className="mt-2 flex items-baseline gap-1.5">
-        <span className={cn("font-display text-3xl font-medium tracking-tight", accent && "text-foreground")}>
+        <span className={cn("text-3xl font-bold tracking-tight", accent && "text-foreground")}>
           {value}
         </span>
         {suffix && <span className="text-sm text-muted-foreground">{suffix}</span>}
