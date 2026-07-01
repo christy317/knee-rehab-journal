@@ -14,11 +14,12 @@ function AppShell() {
     <div className="min-h-screen bg-background">
       <div className="mx-auto flex min-h-screen max-w-md flex-col">
         <div className="flex items-center gap-2 px-5 pb-2 pt-6">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lift">
             <KneedleMark />
           </div>
-          <span className="font-display text-lg font-medium tracking-tight">Kneedle</span>
+          <span className="text-lg font-bold tracking-tight">Kneedle</span>
         </div>
+
 
         <main className="flex-1 px-5 pb-28">
           {tab === "protocol" && <ProtocolScreen />}

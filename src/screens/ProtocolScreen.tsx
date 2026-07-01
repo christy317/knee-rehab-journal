@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Plus, Check, ChevronRight } from "lucide-react";
-import { CATEGORY_ORDER, cn } from "@/lib/utils";
+import { CATEGORY_ORDER, CATEGORY_ICON, cn } from "@/lib/utils";
 import { useStore } from "@/lib/store-context";
 import { CategoryTag } from "@/components/CategoryTag";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Category, Exercise } from "@/lib/types";
 import { toast } from "sonner";
+import heroKnee from "@/assets/hero-knee.jpg";
 
 export default function ProtocolScreen() {
   const { exercises, draft, addToToday, upsertExercise, addCustomExercise } = useStore();
@@ -30,46 +31,71 @@ export default function ProtocolScreen() {
 
   return (
     <div className="space-y-6 pb-4">
-      <header className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">Your protocol</p>
-        <h1 className="font-display text-3xl font-medium tracking-tight">Today's exercises</h1>
-        <p className="text-sm text-muted-foreground">
-          Tap a card to view cues. Add what you'll do today to your session.
-        </p>
+      <header className="space-y-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Your protocol</p>
+        <h1 className="text-3xl font-bold tracking-tight">Today's exercises</h1>
+        <div className="relative overflow-hidden rounded-2xl bg-secondary">
+          <img
+            src={heroKnee}
+            alt="Knee in a compression sleeve"
+            className="h-40 w-full object-cover"
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 via-background/50 to-transparent p-4">
+            <p className="text-sm font-medium text-foreground">
+              Move gently. Build consistency.
+            </p>
+          </div>
+        </div>
       </header>
 
       {CATEGORY_ORDER.map((cat) => {
         const items = grouped.get(cat) ?? [];
         if (items.length === 0) return null;
         return (
-          <section key={cat} className="space-y-2.5">
-            <div className="flex items-center gap-2 px-1">
-              <CategoryTag category={cat} />
-              <span className="text-xs text-muted-foreground">{items.length}</span>
+          <section key={cat} className="space-y-3">
+            <div className="flex items-center gap-3 px-1">
+              <img
+                src={CATEGORY_ICON[cat]}
+                alt=""
+                loading="lazy"
+                width={40}
+                height={40}
+                className="h-10 w-10 object-contain"
+              />
+              <div className="flex-1">
+                <h2 className="text-base font-bold tracking-tight">{cat}</h2>
+                <p className="text-xs text-muted-foreground">{items.length} exercises</p>
+              </div>
             </div>
             <ul className="space-y-2">
               {items.map((ex) => {
                 const added = inToday(ex.id);
                 return (
                   <li key={ex.id}>
-                    <div className="group rounded-lg border border-border bg-card shadow-soft transition-shadow hover:shadow-lift">
+                    <div className="group rounded-2xl border border-border bg-card transition-shadow hover:shadow-lift">
                       <button
                         onClick={() => setOpenId(ex.id)}
-                        className="flex w-full items-start gap-3 p-4 text-left"
+                        className="flex w-full items-center gap-3 p-3 text-left"
                       >
-                        <div className="min-w-0 flex-1 space-y-1">
-                          <h3 className="font-medium leading-snug">{ex.name}</h3>
-                          <p className="text-xs text-muted-foreground">{ex.defaultPrescription}</p>
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-secondary">
+                          <img
+                            src={CATEGORY_ICON[ex.category]}
+                            alt=""
+                            loading="lazy"
+                            width={48}
+                            height={48}
+                            className="h-12 w-12 object-contain"
+                          />
                         </div>
-                        <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-                      </button>
-                      <div className="flex items-center justify-between border-t border-border/70 px-2 py-1.5">
-                        <span className="px-2 text-[11px] text-muted-foreground">
-                          {ex.custom ? "Custom" : "Library"}
-                        </span>
+                        <div className="min-w-0 flex-1 space-y-0.5">
+                          <h3 className="font-semibold leading-snug truncate">{ex.name}</h3>
+                          <p className="text-xs text-muted-foreground">
+                            {ex.defaultPrescription} · {ex.category}
+                          </p>
+                        </div>
                         <Button
-                          size="sm"
-                          variant={added ? "secondary" : "ghost"}
+                          size="icon"
+                          variant={added ? "secondary" : "default"}
                           onClick={(e) => {
                             e.stopPropagation();
                             if (!added) {
@@ -77,12 +103,16 @@ export default function ProtocolScreen() {
                               toast.success(`${ex.name} added to today`);
                             }
                           }}
-                          className={cn("h-8 gap-1.5 text-xs", added && "pointer-events-none")}
+                          className={cn(
+                            "h-9 w-9 shrink-0 rounded-full",
+                            added && "pointer-events-none bg-primary-soft text-primary"
+                          )}
+                          aria-label={added ? "Added" : "Add to today"}
                         >
-                          {added ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
-                          {added ? "Added" : "Add to today"}
+                          {added ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                         </Button>
-                      </div>
+                        <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      </button>
                     </div>
                   </li>
                 );
@@ -94,7 +124,7 @@ export default function ProtocolScreen() {
 
       <Button
         variant="outline"
-        className="w-full gap-2 border-dashed"
+        className="w-full gap-2 rounded-full border-dashed py-6"
         onClick={() => setShowAdd(true)}
       >
         <Plus className="h-4 w-4" /> Add custom exercise
@@ -143,7 +173,6 @@ function ExerciseSheet({
   const [prescription, setPrescription] = useState("");
   const [notes, setNotes] = useState("");
 
-  // sync when exercise changes
   useMemoSync(exercise, (e) => {
     setPrescription(e.defaultPrescription);
     setNotes(e.notes ?? "");
@@ -151,12 +180,21 @@ function ExerciseSheet({
 
   return (
     <Sheet open={!!exercise} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent side="bottom" className="max-h-[92vh] overflow-y-auto rounded-t-2xl">
+      <SheetContent side="bottom" className="max-h-[92vh] overflow-y-auto rounded-t-3xl">
         {exercise && (
           <div className="mx-auto max-w-md space-y-5">
-            <SheetHeader className="space-y-2 text-left">
-              <CategoryTag category={exercise.category} className="self-start" />
-              <SheetTitle className="font-display text-2xl font-medium leading-tight">
+            <div className="flex justify-center">
+              <img
+                src={CATEGORY_ICON[exercise.category]}
+                alt=""
+                width={96}
+                height={96}
+                className="h-24 w-24 object-contain"
+              />
+            </div>
+            <SheetHeader className="space-y-2 text-center">
+              <CategoryTag category={exercise.category} className="mx-auto" />
+              <SheetTitle className="text-2xl font-bold leading-tight">
                 {exercise.name}
               </SheetTitle>
               <SheetDescription className="text-sm">{exercise.description}</SheetDescription>
@@ -169,7 +207,7 @@ function ExerciseSheet({
               <ol className="space-y-2">
                 {exercise.demo.map((step, i) => (
                   <li key={i} className="flex gap-3 text-sm leading-relaxed">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-soft text-xs font-bold text-primary">
                       {i + 1}
                     </span>
                     <span>{step}</span>
@@ -204,6 +242,7 @@ function ExerciseSheet({
                   onSave({ ...exercise, defaultPrescription: prescription, notes });
                 }}
                 variant="outline"
+                className="rounded-full"
               >
                 Save changes
               </Button>
@@ -213,6 +252,7 @@ function ExerciseSheet({
                   onClose();
                 }}
                 disabled={added}
+                className="rounded-full"
               >
                 {added ? "Already in today's session" : "Add to today's session"}
               </Button>
@@ -224,7 +264,6 @@ function ExerciseSheet({
   );
 }
 
-// tiny helper to sync state when the open exercise changes
 import { useEffect } from "react";
 function useMemoSync<T>(value: T | null, fn: (v: T) => void) {
   useEffect(() => {
@@ -260,9 +299,9 @@ function AddCustomDialog({
         if (!o) reset();
       }}
     >
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="font-display text-xl font-medium">New custom exercise</DialogTitle>
+          <DialogTitle className="text-xl font-bold">New custom exercise</DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
           <div className="space-y-1.5">

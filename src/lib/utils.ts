@@ -1,6 +1,10 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { Category } from "./types";
+import iconMobility from "@/assets/icon-mobility.png";
+import iconActivation from "@/assets/icon-activation.png";
+import iconStrength from "@/assets/icon-strength.png";
+import iconStability from "@/assets/icon-stability.png";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -11,6 +15,13 @@ export function uid() {
 }
 
 export const CATEGORY_ORDER: Category[] = ["Mobility", "Activation", "Strength", "Stability"];
+
+export const CATEGORY_ICON: Record<Category, string> = {
+  Mobility: iconMobility,
+  Activation: iconActivation,
+  Strength: iconStrength,
+  Stability: iconStability,
+};
 
 export function categoryClasses(c: Category) {
   switch (c) {
@@ -24,6 +35,7 @@ export function categoryClasses(c: Category) {
       return "bg-category-stability/10 text-category-stability border-category-stability/20";
   }
 }
+
 
 export function painColor(level: number) {
   // Returns a tailwind bg class for level 1-5
